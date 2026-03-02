@@ -1,0 +1,396 @@
+{
+  "updatedAt": "2026-03-02T21:06:49.867Z",
+  "createdAt": "2026-02-22T08:12:32.553Z",
+  "id": "8hzgGxgbXHollbeT",
+  "name": "SImple Telegram test",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "2f8a4143-8b56-4a7f-8f28-72f92cf1058e",
+      "name": "Telegram Trigger",
+      "webhookId": "6c77044c-5eba-4064-9d67-a2902fac6a3c",
+      "credentials": {
+        "telegramApi": {
+          "id": "XgKIpqQsLQXTMl3m",
+          "name": "Ema_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "851cceff-c8b5-4bfb-889b-119e60d843dd",
+              "leftValue": "={{ $json.message.from.id }}",
+              "rightValue": 1487598901,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        176,
+        0
+      ],
+      "id": "5fe244f8-a63c-4620-a25e-1a8e4b5cef26",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=From: {{ $json.message.from.first_name }}\nIs a bot: {{ $json.message.from.is_bot }}\nchat type: {{ $json.message.chat.type }}\nMessage: {{ $json.message.text }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        384,
+        0
+      ],
+      "id": "e61a8825-37d8-401b-837d-84aee3b07f45",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "grok-4-1-fast-reasoning",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatXAiGrok",
+      "typeVersion": 1,
+      "position": [
+        352,
+        192
+      ],
+      "id": "c105c617-00cf-4d9f-81a8-ff47c5077bbf",
+      "name": "xAI Grok Chat Model",
+      "credentials": {
+        "xAiApi": {
+          "id": "9quSZ4QThhfC8Wgi",
+          "name": "xAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Filter').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        736,
+        0
+      ],
+      "id": "1f60a604-f7b1-4aed-bb61-b53de8dcf631",
+      "name": "Send a text message",
+      "webhookId": "204508fa-c186-4659-b9ba-4a01b2fa329c",
+      "credentials": {
+        "telegramApi": {
+          "id": "XgKIpqQsLQXTMl3m",
+          "name": "Ema_bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "xAI Grok Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "c79fdfbe-0b65-457a-9388-f29a629ebe0c",
+  "activeVersionId": "c79fdfbe-0b65-457a-9388-f29a629ebe0c",
+  "versionCounter": 72,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-02-22T08:12:32.566Z",
+      "createdAt": "2026-02-22T08:12:32.566Z",
+      "role": "workflow:owner",
+      "workflowId": "8hzgGxgbXHollbeT",
+      "projectId": "o1jtzgsmNZSFFFFF",
+      "project": {
+        "updatedAt": "2025-07-28T20:45:19.053Z",
+        "createdAt": "2025-07-28T20:41:18.781Z",
+        "id": "o1jtzgsmNZSFFFFF",
+        "name": "Emanuel A <curable.andante7h@icloud.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "6235d17f-f06c-47c8-ba39-e535c9109e4e"
+      }
+    }
+  ],
+  "tags": [
+    {
+      "updatedAt": "2026-02-22T08:41:24.851Z",
+      "createdAt": "2026-02-22T08:41:24.851Z",
+      "id": "UoVJRKJuAaKfsOvI",
+      "name": "Telegram"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-02T21:06:52.000Z",
+    "createdAt": "2026-03-02T21:06:49.868Z",
+    "versionId": "c79fdfbe-0b65-457a-9388-f29a629ebe0c",
+    "workflowId": "8hzgGxgbXHollbeT",
+    "nodes": [
+      {
+        "parameters": {
+          "updates": [
+            "message"
+          ],
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.telegramTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -16,
+          0
+        ],
+        "id": "2f8a4143-8b56-4a7f-8f28-72f92cf1058e",
+        "name": "Telegram Trigger",
+        "webhookId": "6c77044c-5eba-4064-9d67-a2902fac6a3c",
+        "credentials": {
+          "telegramApi": {
+            "id": "XgKIpqQsLQXTMl3m",
+            "name": "Ema_bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "851cceff-c8b5-4bfb-889b-119e60d843dd",
+                "leftValue": "={{ $json.message.from.id }}",
+                "rightValue": 1487598901,
+                "operator": {
+                  "type": "number",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.3,
+        "position": [
+          176,
+          0
+        ],
+        "id": "5fe244f8-a63c-4620-a25e-1a8e4b5cef26",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=From: {{ $json.message.from.first_name }}\nIs a bot: {{ $json.message.from.is_bot }}\nchat type: {{ $json.message.chat.type }}\nMessage: {{ $json.message.text }}",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          384,
+          0
+        ],
+        "id": "e61a8825-37d8-401b-837d-84aee3b07f45",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "model": "grok-4-1-fast-reasoning",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatXAiGrok",
+        "typeVersion": 1,
+        "position": [
+          352,
+          192
+        ],
+        "id": "c105c617-00cf-4d9f-81a8-ff47c5077bbf",
+        "name": "xAI Grok Chat Model",
+        "credentials": {
+          "xAiApi": {
+            "id": "9quSZ4QThhfC8Wgi",
+            "name": "xAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "chatId": "={{ $('Filter').item.json.message.chat.id }}",
+          "text": "={{ $json.output }}",
+          "additionalFields": {
+            "appendAttribution": false
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          736,
+          0
+        ],
+        "id": "1f60a604-f7b1-4aed-bb61-b53de8dcf631",
+        "name": "Send a text message",
+        "webhookId": "204508fa-c186-4659-b9ba-4a01b2fa329c",
+        "credentials": {
+          "telegramApi": {
+            "id": "XgKIpqQsLQXTMl3m",
+            "name": "Ema_bot"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Telegram Trigger": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "xAI Grok Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Send a text message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Emanuel A",
+    "name": "Version c79fdfbe",
+    "description": "",
+    "autosaved": false,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-03-02T21:06:52.205Z",
+        "id": 148,
+        "workflowId": "8hzgGxgbXHollbeT",
+        "versionId": "c79fdfbe-0b65-457a-9388-f29a629ebe0c",
+        "event": "activated",
+        "userId": "6235d17f-f06c-47c8-ba39-e535c9109e4e"
+      }
+    ]
+  }
+}
